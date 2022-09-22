@@ -6,8 +6,7 @@ class Quadro extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            tabuleiro_recebido: props.tabu,
-            tabuleiro_gerado: 0,
+            // tabuleiro_recebido: props.tabu,
             origem: {
                 y: props.x,
                 x: props.y,
@@ -18,39 +17,59 @@ class Quadro extends React.Component{
                 y: props.x,
             },
         }
-        this.handleSquare = this.handleSquare.bind(this)
-        this.handleToken = this.handleToken.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
-    handleSquare(event){
-        event.preventDefault();
+    handleClick(){
+        let origem_dama=0;
+        let destino_dama=0;
+
         if (this.state.origem.n === 'não é peça'){
             this.setState({
                 destino: {
-                    y: this.props.y,
-                    x: this.props.x,
+                    x: this.state.destino.y,
+                    y: this.state.destino.x
                 }
             })
-            // console.log(this.state);
+
+            destino_dama = this.state.destino
+
+            console.log('Não é uma peça. Destino = ',destino_dama);
+        }else if (this.state.origem.n !== 'não é peça'){
+            this.setState({
+                origem: {
+                    y: this.state.origem.x,
+                    x: this.state.origem.y,
+                    n: this.state.origem.n
+                }
+            })
+            origem_dama = this.state.origem
+            console.log('Origem = ',origem_dama);
         }
-        // const page = new Page(this.state.origem,this.state.destino) //* Função que gera a matriz com os movimentos da dama
-        // console.log(page)
-        newTabuleiro(this.state.tabuleiro_recebido,this.state.origem,this.state.destino)
     }
-    handleToken(event){
-        event.preventDefault();
-        this.setState({
-            origem: {
-                y: this.state.origem.y + event.offsetX,
-                x: this.state.origem.x + event.offsetX,
-                n: this.state.origem.n
-            },
-            destino: {
-                y: 0,
-                x: 0,
-            }
-        })
-        // console.log(this.state)
-    }
+    // handleSquare(event){
+    //     event.preventDefault();
+    //     if (this.state.origem.n === 'não é peça'){
+    //         this.setState({
+    //             destino: {
+    //                 y: this.props.y,
+    //                 x: this.props.x,
+    //             }
+    //         })
+    //     }
+    //     console.log(this.state)
+    //     //* newTabuleiro(this.state.tabuleiro_recebido,this.state.origem,this.state.destino)
+    // }
+    // handleToken(event){
+    //     event.preventDefault();
+    //     this.setState({
+    //         origem: {
+    //             y: this.state.origem.y + event.offsetX,
+    //             x: this.state.origem.x + event.offsetX,
+    //             n: this.state.origem.n
+    //         },
+    //     })
+    //     console.log(this.state)
+    // }
     render() {
         const colorSquare = (x, y) => {
             let color = "";
@@ -68,17 +87,17 @@ class Quadro extends React.Component{
             let fix = "";
 
             if (n === 1) {
-                fix = <div onClick={this.handleToken} className="disk team-a"></div>
+                fix = <div onClick={this.handleClick} className="disk team-a"></div>
             }
             else if (n === 2) {
-                fix = <div onClick={this.handleToken} className="disk team-b"></div>
+                fix = <div onClick={this.handleClick} className="disk team-b"></div>
             }
 
             return fix;
         }
 
         return (
-            <div onClick={this.handleSquare} className={"square " + colorSquare(this.props.x, this.props.y)} x={this.props.x} y ={this.props.y}>{ficha(this.props.n)}</div>
+            <div onClick={this.handleClick} className={"square " + colorSquare(this.props.x, this.props.y)} x={this.props.x} y ={this.props.y}>{ficha(this.props.n)}</div>
         );
     }
 }
