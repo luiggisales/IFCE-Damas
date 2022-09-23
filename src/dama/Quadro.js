@@ -1,5 +1,5 @@
 import React from 'react';
-import { newTabuleiro } from './NovoTabuleiro/NovaTabela';
+import { saveDestino, saveOrigem } from './NovoTabuleiro/NovaTabela';
 import './Quadro.css';
 
 class Quadro extends React.Component{
@@ -8,8 +8,8 @@ class Quadro extends React.Component{
         this.state = {
             tabuleiro_recebido: props.tabu,
             origem: {
-                y: props.x,
                 x: props.y,
+                y: props.x,
                 n: props.n === 1 | props.n === 2 ? props.n : props.x % 2 === 0 ? props.y % 2 !== 0 ? "preto" : "branco" : props.y % 2 === 0 ? "preto" : "branco"
             },
             destino: {
@@ -17,12 +17,12 @@ class Quadro extends React.Component{
                 y: props.x,
             },
         }
-        this.handleClick = this.handleClick.bind(this)
-    }
-    handleClick(){
-        let origem_dama=0;
-        let destino_dama=0;
 
+        this.getOrigem = this.getOrigem.bind(this)
+        this.getDestino = this.getDestino.bind(this)
+        
+    }
+    getDestino (){
         if (this.state.origem.n === "preto"){
             this.setState({
                 destino: {
@@ -30,21 +30,54 @@ class Quadro extends React.Component{
                     y: this.state.destino.x
                 }
             })
-            destino_dama = this.state.destino
-            // console.log('Destino = ',destino_dama)
-        }else if (this.state.origem.n === 1 | this.state.origem.n === 2){
+            saveDestino(this.state.destino)
+            return this.state.destino
+        }
+    }
+    getOrigem(){
+        if (this.state.origem.n === 1 | this.state.origem.n === 2){
             this.setState({
                 origem: {
-                   y: this.state.origem.x,
-                   x: this.state.origem.y,
-                   n: this.state.origem.n
+                    x: this.state.origem.y,
+                    y: this.state.origem.x,
+                    n: this.state.origem.n
                 }
             })
-            origem_dama = this.state.origem
-            // console.log('Origem = ',origem_dama)
+            saveOrigem(this.state.origem)
+            return this.state.origem
         }
-        newTabuleiro(this.state.tabuleiro_recebido,origem_dama,destino_dama)
     }
+    
+    // handleClick(){
+    //     let origem_dama=0;
+    //     let destino_dama=0;
+
+    //     if (this.state.origem.n === "preto"){
+    //         this.setState({
+    //             destino: {
+    //                 x: this.state.destino.y,
+    //                 y: this.state.destino.x
+    //             }
+    //         })
+    //         destino_dama = this.state.destino
+    //         // console.log('Destino = ',destino_dama)
+    //     }else if (this.state.origem.n === 1 | this.state.origem.n === 2){
+    //         this.setState({
+    //             origem: {
+    //                y: this.state.origem.x,
+    //                x: this.state.origem.y,
+    //                n: this.state.origem.n
+    //             },
+    //             destino: {
+    //                 x: this.state.destino.y,
+    //                 y: this.state.destino.x
+    //             }
+    //         })
+    //         origem_dama = this.state.origem
+    //         // console.log('Origem = ',origem_dama)
+    //     }
+    //     newTabuleiro(this.state.tabuleiro_recebido,origem_dama,destino_dama)
+    // }
     render() {
         const colorSquare = (x, y) => {
             let color = "";
@@ -62,17 +95,17 @@ class Quadro extends React.Component{
             let fix = "";
 
             if (n === 1) {
-                fix = <div onClick={this.handleClick} className="disk team-a"></div>
+                fix = <div onClick={this.getOrigem} className="disk team-a"></div>
             }
             else if (n === 2) {
-                fix = <div onClick={this.handleClick} className="disk team-b"></div>
+                fix = <div onClick={this.getOrigem} className="disk team-b"></div>
             }
 
             return fix;
         }
 
         return (
-            <div onClick={this.handleClick} className={"square " + colorSquare(this.props.x, this.props.y)} x={this.props.x} y ={this.props.y}>{ficha(this.props.n)}</div>
+            <div onClick={this.getDestino}  className={"square " + colorSquare(this.props.x, this.props.y)} x={this.props.x} y ={this.props.y}>{ficha(this.props.n)}</div>
         );
     }
 }

@@ -19,8 +19,14 @@ class Tabuleiro extends React.Component
                 [0, 2, 0, 2, 0, 2, 0, 2],
                 [2, 0, 2, 0, 2, 0, 2, 0]
             ],
-            novo_tabuleiro: props.newTabuleiro
+            criar_tabuleiro: props.criarTabuleiro
         }
+        this.handleClick = this.handleClick.bind(this)
+    }
+    handleClick(){
+        let novo_tabuleiro = this.state.criar_tabuleiro(this.state.tabu)
+        
+        // console.log(novo_tabuleiro);
     }
     render() {
         let x = 0, y = 0;
@@ -36,7 +42,7 @@ class Tabuleiro extends React.Component
         });
 
         return (
-            <div className="tabuleiro">{rows}</div>
+            <div onClick={this.handleClick} className="tabuleiro">{rows}</div>
         )
     }
 }
