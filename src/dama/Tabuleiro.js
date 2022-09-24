@@ -1,7 +1,6 @@
 import React from 'react';
 import Quadro from './Quadro';
 import './Tabuleiro.css'
-
 class Tabuleiro extends React.Component 
 {
     constructor(props) 
@@ -9,7 +8,7 @@ class Tabuleiro extends React.Component
         super(props);
 
         this.state = {
-            tabu:[
+            tabuleiro: [
                 [0, 1, 0, 1, 0, 1, 0, 1],
                 [1, 0, 1, 0, 1, 0, 1, 0],
                 [0, 1, 0, 1, 0, 1, 0, 1],
@@ -21,17 +20,19 @@ class Tabuleiro extends React.Component
             ],
             criar_tabuleiro: props.criarTabuleiro
         }
+        this.novo_tabuleiro = this.state.tabuleiro
         this.handleClick = this.handleClick.bind(this)
     }
     handleClick(){
-        let novo_tabuleiro = this.state.criar_tabuleiro(this.state.tabu)
-        
-        // console.log(novo_tabuleiro);
+        let novo = this.props.criarTabuleiro(this.state.tabuleiro)
+        this.setState({
+            tabuleiro: novo ?? this.state.tabuleiro
+        })
     }
     render() {
         let x = 0, y = 0;
 
-        const rows = this.state.tabu.map((row) => {
+        const rows = this.state.tabuleiro.map((row) => {
             const r = row.map((n) => {
                 return <Quadro x={x} y={y++} n={n} tabu={this.state.tabu}/>
             })
@@ -40,7 +41,6 @@ class Tabuleiro extends React.Component
             x = x + 1;
             return <div className="row">{r}</div>
         });
-
         return (
             <div onClick={this.handleClick} className="tabuleiro">{rows}</div>
         )
