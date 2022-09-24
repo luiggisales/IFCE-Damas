@@ -1,5 +1,6 @@
 export const criarTabuleiro  = (tabu) =>{
     const matriz = Array(8)
+
     let destino = JSON.parse(localStorage.getItem('destino'))
     let origem = JSON.parse(localStorage.getItem('origem'))
     let matriz_gerada = JSON.parse(localStorage.getItem('matriz_gerada'))
@@ -14,6 +15,7 @@ export const criarTabuleiro  = (tabu) =>{
             matriz[linha][coluna] = tabu[linha][coluna]
         }
     }
+
     //* Gerar matriz com o destino que foi dado
     if (destino && origem){
         if (dama_antiga !== origem.n){
@@ -24,10 +26,13 @@ export const criarTabuleiro  = (tabu) =>{
                 }
             }
         }
+        localStorage.removeItem('origem')
         localStorage.removeItem('destino')
         saveDamaAntiga(origem.n)
         saveMatriz(matriz)
     }
+
+    //* Gerar matriz com o movimento
     if (matriz_gerada){
         if (destino && origem){
             if (dama_antiga !== origem.n){

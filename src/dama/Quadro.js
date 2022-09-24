@@ -1,5 +1,5 @@
 import React from 'react';
-import { saveDestino, saveOrigem } from './NovoTabuleiro/NovaTabela';
+import { saveDestino, saveDestinoQuadrado, saveOrigem } from './NovoTabuleiro/NovaTabela';
 import './Quadro.css';
 
 class Quadro extends React.Component{
@@ -23,7 +23,7 @@ class Quadro extends React.Component{
         
     }
     getDestino (){
-        if (this.state.origem.n === "preto"){
+        if (this.state.origem.n !== 1 | this.state.origem.n !== 2 && this.state.origem.n === "preto"){
             this.setState({
                 destino: {
                     x: this.state.destino.y,
@@ -32,52 +32,36 @@ class Quadro extends React.Component{
             })
             saveDestino(this.state.destino)
             return this.state.destino
+        }if (this.state.origem.x === this.state.destino.y && this.state.origem.y === this.state.destino.x){
+            console.log('onde estava a peça',{
+                detino: this.state.destino,
+            })
+            this.setState({
+                destino: {
+                    x: this.state.destino.y,
+                    y: this.state.destino.x
+                }
+            })
+            localStorage.removeItem('destino')
+            saveDestino(this.state.destino)
         }
     }
     getOrigem(){
-        if (this.state.origem.n === 1 | this.state.origem.n === 2){
+        if (this.state.origem.n === 1 | this.state.origem.n === 2 && this.state.origem.n !== "preto"){
             this.setState({
                 origem: {
                     x: this.state.origem.y,
                     y: this.state.origem.x,
                     n: this.state.origem.n
-                }
+                },
             })
             saveOrigem(this.state.origem)
             return this.state.origem
+        }if (this.state.origem.n === "preto"){
+            console.log('Peça que já foi movimentada',this.state.origem);
         }
     }
     
-    // handleClick(){
-    //     let origem_dama=0;
-    //     let destino_dama=0;
-
-    //     if (this.state.origem.n === "preto"){
-    //         this.setState({
-    //             destino: {
-    //                 x: this.state.destino.y,
-    //                 y: this.state.destino.x
-    //             }
-    //         })
-    //         destino_dama = this.state.destino
-    //         // console.log('Destino = ',destino_dama)
-    //     }else if (this.state.origem.n === 1 | this.state.origem.n === 2){
-    //         this.setState({
-    //             origem: {
-    //                y: this.state.origem.x,
-    //                x: this.state.origem.y,
-    //                n: this.state.origem.n
-    //             },
-    //             destino: {
-    //                 x: this.state.destino.y,
-    //                 y: this.state.destino.x
-    //             }
-    //         })
-    //         origem_dama = this.state.origem
-    //         // console.log('Origem = ',origem_dama)
-    //     }
-    //     newTabuleiro(this.state.tabuleiro_recebido,origem_dama,destino_dama)
-    // }
     render() {
         const colorSquare = (x, y) => {
             let color = "";
