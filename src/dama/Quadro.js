@@ -1,5 +1,5 @@
 import React from 'react';
-import { saveDestino, saveDestinoQuadrado, saveOrigem } from './NovoTabuleiro/NovaTabela';
+import { destinoBackup, origemBackup, saveDestino, saveOrigem } from './NovoTabuleiro/NovaTabela';
 import './Quadro.css';
 
 class Quadro extends React.Component{
@@ -30,12 +30,12 @@ class Quadro extends React.Component{
                     y: this.state.destino.x
                 }
             })
+            console.log('destino primeiro IF',this.state.destino);
+
             saveDestino(this.state.destino)
+            destinoBackup(this.state.destino)
             return this.state.destino
         }if (this.state.origem.x === this.state.destino.y && this.state.origem.y === this.state.destino.x){
-            console.log('onde estava a peça',{
-                detino: this.state.destino,
-            })
             this.setState({
                 destino: {
                     x: this.state.destino.y,
@@ -44,9 +44,12 @@ class Quadro extends React.Component{
             })
             localStorage.removeItem('destino')
             saveDestino(this.state.destino)
+            destinoBackup(this.state.destino)
         }
     }
     getOrigem(){
+        let origem_backup = JSON.parse(localStorage.getItem('origem_backup'))
+        let dama_antiga = JSON.parse(localStorage.getItem('dama_antiga'))
         if (this.state.origem.n === 1 | this.state.origem.n === 2 && this.state.origem.n !== "preto"){
             this.setState({
                 origem: {
@@ -56,10 +59,27 @@ class Quadro extends React.Component{
                 },
             })
             saveOrigem(this.state.origem)
+            origemBackup(this.state.origem)
             return this.state.origem
-        }if (this.state.origem.n === "preto"){
-            console.log('Peça que já foi movimentada',this.state.origem);
         }
+        if (this.state.origem.x !== origem_backup.x && this.state.origem.y !== origem_backup.y){
+            // console.log('origem da peça que já foi jogada getOrigem',{
+            //     x: this.state.origem.x,
+            //     y: this.state.origem.y,
+            //     n: origem_backup.n === 1 ? 2 : 1
+            // });
+
+            localStorage.removeItem('destino')
+            this.setState({
+                origem: {
+                    x: this.state.origem.x,
+                    y: this.state.origem.y,
+                    n: origem_backup.n === 1 ? 2 : origem_backup.n === "preto" ? dama_antiga === 1 ? 1 : 2 : 1 
+                },
+            })
+            origemBackup(this.state.origem)
+        }
+        console.log('getOrigem',this.state.origem);
     }
     
     render() {

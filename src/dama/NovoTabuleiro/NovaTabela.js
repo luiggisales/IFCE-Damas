@@ -3,6 +3,7 @@ export const criarTabuleiro  = (tabu) =>{
 
     let destino = JSON.parse(localStorage.getItem('destino'))
     let origem = JSON.parse(localStorage.getItem('origem'))
+    let origem_backup = JSON.parse(localStorage.getItem('origem_backup'))
     let matriz_gerada = JSON.parse(localStorage.getItem('matriz_gerada'))
     let dama_antiga = JSON.parse(localStorage.getItem('dama_antiga'))
 
@@ -28,7 +29,7 @@ export const criarTabuleiro  = (tabu) =>{
         }
         localStorage.removeItem('origem')
         localStorage.removeItem('destino')
-        saveDamaAntiga(origem.n)
+        saveDamaAntiga(origem.n !== "preto" ? origem.n : origem_backup.n)
         saveMatriz(matriz)
     }
 
@@ -66,5 +67,15 @@ export const saveOrigem = (origem)=>{
 export const saveDestino = (destino) => {
     if (destino){
         localStorage.setItem('destino',JSON.stringify(destino))
+    }
+}
+export const origemBackup = (origem) =>{
+    if (origem){
+        localStorage.setItem('origem_backup',JSON.stringify(origem))
+    }
+}
+export const destinoBackup = (destino) =>{
+    if (destino){
+        localStorage.setItem('destino_backup',JSON.stringify(destino))
     }
 }
